@@ -17,7 +17,9 @@ TEMPLATE_DIR = os.path.join(BASE_DIR, "templates")
 
 app = Flask(__name__, template_folder=TEMPLATE_DIR)
 
-CWA_API_KEY = os.environ.get("CWA_API_KEY", "***REDACTED***")
+CWA_API_KEY = os.environ.get("CWA_API_KEY")
+if not CWA_API_KEY:
+    raise RuntimeError("CWA_API_KEY environment variable not set. Set it in .env or Vercel Environment Variables.")
 
 # ── 地點對應表 ──────────────────────────────────────────────
 

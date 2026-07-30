@@ -12,7 +12,9 @@ import requests
 
 app = Flask(__name__)
 
-CWA_API_KEY = os.environ.get("CWA_API_KEY", "***REDACTED***")
+CWA_API_KEY = os.environ.get("CWA_API_KEY")
+if not CWA_API_KEY:
+    raise RuntimeError("CWA_API_KEY environment variable not set. Set it in .env or Vercel Environment Variables.")
 
 # ── 地點對應表 ──────────────────────────────────────────────
 # 潮汐 API (F-A0021-001) 用完整縣市名稱
