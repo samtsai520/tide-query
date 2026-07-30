@@ -8,6 +8,7 @@ import os
 import sys
 from datetime import datetime, timedelta
 from flask import Flask, jsonify, render_template, request
+from urllib.parse import unquote
 import requests
 
 # Vercel serverless: 專案根目錄為 template_folder
@@ -341,6 +342,7 @@ def api_locations():
 
 @app.route("/api/top3-tides/<location_key>")
 def api_top3_tides(location_key):
+    location_key = unquote(location_key)
     if location_key not in LOCATIONS:
         return jsonify({"error": "未知地點"}), 400
     result, err = get_top3_tides(location_key)
@@ -351,6 +353,7 @@ def api_top3_tides(location_key):
 
 @app.route("/api/tide-detail/<location_key>")
 def api_tide_detail(location_key):
+    location_key = unquote(location_key)
     if location_key not in LOCATIONS:
         return jsonify({"error": "未知地點"}), 400
     days = request.args.get("days", 7, type=int)
@@ -364,6 +367,7 @@ def api_tide_detail(location_key):
 
 @app.route("/api/weather/<location_key>")
 def api_weather(location_key):
+    location_key = unquote(location_key)
     if location_key not in LOCATIONS:
         return jsonify({"error": "未知地點"}), 400
     days = request.args.get("days", 7, type=int)
@@ -377,6 +381,7 @@ def api_weather(location_key):
 
 @app.route("/api/combined/<location_key>")
 def api_combined(location_key):
+    location_key = unquote(location_key)
     if location_key not in LOCATIONS:
         return jsonify({"error": "未知地點"}), 400
     days = request.args.get("days", 7, type=int)
