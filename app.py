@@ -23,90 +23,105 @@ LOCATIONS = {
         "tide_name": "新北市淡水區",
         "weather_dataset": "F-D0047-071",   # 新北市未來1週
         "weather_township": "淡水區",
+        "county_name": "新北市",
         "label": "新北 淡水",
     },
     "貢寮": {
         "tide_name": "新北市貢寮區",
         "weather_dataset": "F-D0047-071",   # 新北市未來1週
         "weather_township": "貢寮區",
+        "county_name": "新北市",
         "label": "新北 貢寮",
     },
     "壯圍": {
         "tide_name": "宜蘭縣壯圍鄉",
         "weather_dataset": "F-D0047-003",   # 宜蘭縣未來1週
         "weather_township": "壯圍鄉",
+        "county_name": "宜蘭縣",
         "label": "宜蘭 壯圍",
     },
     "蘆竹": {
         "tide_name": "桃園市蘆竹區",
         "weather_dataset": "F-D0047-007",   # 桃園市未來1週
         "weather_township": "蘆竹區",
+        "county_name": "桃園市",
         "label": "桃園 蘆竹",
     },
     "香山": {
         "tide_name": "新竹市香山區",
         "weather_dataset": "F-D0047-055",   # 新竹市未來1週
         "weather_township": "香山區",
+        "county_name": "新竹市",
         "label": "新竹 香山",
     },
     "芳苑": {
         "tide_name": "彰化縣芳苑鄉",
         "weather_dataset": "F-D0047-019",   # 彰化縣未來1週
         "weather_township": "芳苑鄉",
+        "county_name": "彰化縣",
         "label": "彰化 芳苑",
     },
     "布袋": {
         "tide_name": "嘉義縣布袋鎮",
         "weather_dataset": "F-D0047-031",   # 嘉義縣未來1週
         "weather_township": "布袋鎮",
+        "county_name": "嘉義縣",
         "label": "嘉義 布袋",
     },
     "將軍": {
         "tide_name": "臺南市將軍區",
         "weather_dataset": "F-D0047-079",   # 臺南市未來1週
         "weather_township": "將軍區",
+        "county_name": "臺南市",
         "label": "台南 將軍",
     },
     "永安": {
         "tide_name": "高雄市永安區",
         "weather_dataset": "F-D0047-067",   # 高雄市未來1週
         "weather_township": "永安區",
+        "county_name": "高雄市",
         "label": "高雄 永安",
     },
     "東港": {
         "tide_name": "屏東縣東港鎮",
         "weather_dataset": "F-D0047-035",   # 屏東縣未來1週
         "weather_township": "東港鎮",
+        "county_name": "屏東縣",
         "label": "屏東 東港",
     },
     "臺東": {
         "tide_name": "臺東縣臺東市",
         "weather_dataset": "F-D0047-039",   # 臺東縣未來1週
         "weather_township": "臺東市",
+        "county_name": "臺東縣",
         "label": "台東 台東",
     },
     "花蓮": {
         "tide_name": "花蓮縣花蓮市",
         "weather_dataset": "F-D0047-043",   # 花蓮縣未來1週
         "weather_township": "花蓮市",
+        "county_name": "花蓮縣",
         "label": "花蓮 花蓮",
     },
     "馬公": {
         "tide_name": "澎湖縣馬公市",
         "weather_dataset": "F-D0047-047",   # 澎湖縣未來1週
         "weather_township": "馬公市",
+        "county_name": "澎湖縣",
         "label": "澎湖 馬公",
     },
     "金城": {
         "tide_name": "金門縣金城鎮",
         "weather_dataset": "F-D0047-087",   # 金門縣未來1週
         "weather_township": "金城鎮",
+        "county_name": "金門縣",
         "label": "金門 金城",
     },
     "東引": {
         "tide_name": "連江縣東引鄉",
         "weather_dataset": "F-D0047-083",   # 連江縣未來1週
         "weather_township": "東引鄉",
+        "county_name": "連江縣",
         "label": "馬祖 東引",
     },
 }
@@ -404,6 +419,42 @@ def get_weather_for_days(location_key, days=7):
     return filtered, None
 
 
+# ── API: 日出日落時刻 ─────────────────────────────────────────
+
+def fetch_sunrise_sunset(location_key, days=7):
+    """從 CWA A-B0062-001 取得日出日落時刻"""
+    info = LOCATIONS[location_key]
+    today = datetime.now().strftime("%Y-%m-%d")
+    end_date = (datetime.now() + timedelta(days=days)).strftime("%Y-%m-%d")
+
+    url = "https://opendata.cwa.gov.tw/api/v1/rest/datastore/A-B0062-001"
+    params = {
+        "Authorization": CWA_API_KEY,
+        "CountyName": info["county_name"],
+        "timeFrom": today,
+        "timeTo": end_date,
+    }
+    r = requests.get(url, params=params, timeout=60)
+    if r.status_code != 200:
+        return None, f"日出日落 API 錯誤: HTTP {r.status_code}"
+
+    data = r.json()
+    locations = data.get("records", {}).get("locations", {}).get("location", [])
+    if not locations:
+        return None, "查無日出日落資料"
+
+    times = locations[0].get("time", [])
+    result = {}
+    for t in times:
+        date = t.get("Date", "")
+        result[date] = {
+            "sunrise": t.get("SunRiseTime", ""),
+            "sunset": t.get("SunSetTime", ""),
+        }
+
+    return result, None
+
+
 # ── Flask 路由 ──────────────────────────────────────────────
 
 @app.route("/")
@@ -463,6 +514,7 @@ def api_combined(location_key):
 
     tide_data, tide_err = get_tide_detail(location_key, days)
     weather_data, weather_err = get_weather_for_days(location_key, days)
+    sun_data, sun_err = fetch_sunrise_sunset(location_key, days)
 
     result = {
         "location": LOCATIONS[location_key]["label"],
@@ -477,6 +529,11 @@ def api_combined(location_key):
         result["weather_error"] = weather_err
     else:
         result["weather"] = weather_data
+
+    if sun_err:
+        result["sun_error"] = sun_err
+    else:
+        result["sunrise_sunset"] = sun_data
 
     return jsonify(result)
 
