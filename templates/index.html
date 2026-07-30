@@ -2,8 +2,8 @@
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>潮汐查詢網站</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>賞鳥潮汐查詢</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -11,79 +11,79 @@
       background: #1a1a2e;
       color: #e0e0e0;
       min-height: 100vh;
-      padding: 20px;
+      padding: 12px;
+      max-width: 600px;
+      margin: 0 auto;
     }
     h1 {
       text-align: center;
-      font-size: 24px;
+      font-size: 22px;
       color: #e0e0e0;
-      margin-bottom: 20px;
-      letter-spacing: 2px;
+      margin-bottom: 16px;
+      letter-spacing: 1px;
     }
 
     /* ── Tab 切換 ── */
     .tabs {
       display: flex;
-      justify-content: center;
-      gap: 10px;
-      margin-bottom: 20px;
+      gap: 8px;
+      margin-bottom: 14px;
     }
     .tab-btn {
-      padding: 10px 24px;
+      flex: 1;
+      padding: 10px 8px;
       border: 1px solid #3a3a5c;
-      background: #16213e;
-      color: #a0a0b0;
+      background: #2a5a3a;
+      color: #c0e0c0;
       border-radius: 8px;
       cursor: pointer;
-      font-size: 15px;
+      font-size: 14px;
       transition: all 0.2s;
+      text-align: center;
     }
     .tab-btn.active {
-      background: #0f3460;
-      color: #e0e0e0;
-      border-color: #0f3460;
+      background: #3a7a4a;
+      color: #ffffff;
+      border-color: #3a7a4a;
+      font-weight: 600;
     }
-    .tab-btn:hover { background: #1a2744; }
+    .tab-btn:hover { background: #3a6a3a; }
 
     /* ── 地區按鈕方格 ── */
     .location-grid {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 12px;
-      margin-bottom: 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+      gap: 8px;
+      margin-bottom: 14px;
     }
     .loc-btn {
-      padding: 14px 28px;
-      border: 2px solid #3a3a5c;
-      background: #16213e;
-      color: #c0c0d0;
+      padding: 12px 8px;
+      border: 2px solid #3a5a3a;
+      background: #2a5a3a;
+      color: #c0e0c0;
       border-radius: 10px;
       cursor: pointer;
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 600;
       transition: all 0.2s;
-      min-width: 120px;
       text-align: center;
     }
     .loc-btn:hover {
-      border-color: #0f3460;
-      background: #1a2744;
-      transform: translateY(-2px);
+      background: #3a6a3a;
     }
     .loc-btn.active {
-      border-color: #e94560;
-      background: #0f3460;
+      border-color: #6abf69;
+      background: #3a7a4a;
       color: #ffffff;
     }
 
-    /* ── 天數選擇器（功能二用）── */
+    /* ── 天數選擇器 ── */
     .days-selector {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
-      margin-bottom: 16px;
+      gap: 8px;
+      margin-bottom: 12px;
     }
     .days-selector label { color: #a0a0b0; font-size: 14px; }
     .days-selector select {
@@ -96,38 +96,34 @@
     }
 
     /* ── 結果區塊 ── */
-    .result-panel {
-      max-width: 800px;
-      margin: 0 auto;
-      display: none;
-    }
+    .result-panel { display: none; }
     .result-panel.active { display: block; }
 
     .loading {
       text-align: center;
       color: #a0a0b0;
-      padding: 40px;
-      font-size: 15px;
+      padding: 30px 20px;
+      font-size: 14px;
     }
     .error {
       text-align: center;
       color: #e94560;
       padding: 20px;
-      font-size: 15px;
+      font-size: 14px;
     }
 
-    /* ── 功能一：最高四天表格 ── */
+    /* ── 功能一：最高五天表格 ── */
     .top3-card {
       background: #16213e;
       border: 1px solid #3a3a5c;
       border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 16px;
+      padding: 12px;
+      margin-bottom: 12px;
     }
     .top3-card h3 {
       color: #e94560;
-      font-size: 18px;
-      margin-bottom: 16px;
+      font-size: 15px;
+      margin-bottom: 10px;
       text-align: center;
     }
     .top4-table {
@@ -136,118 +132,111 @@
     }
     .top4-table th {
       color: #808090;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 600;
-      padding: 8px 10px;
+      padding: 6px 4px;
       border-bottom: 2px solid #3a3a5c;
       text-align: center;
+      white-space: nowrap;
     }
     .top4-table td {
-      padding: 10px;
+      padding: 8px 4px;
       border-bottom: 1px solid #2a2a4a;
-      font-size: 15px;
+      font-size: 14px;
       text-align: center;
+      white-space: nowrap;
     }
     .top4-table tr:last-child td { border-bottom: none; }
-    .top4-table .rank {
-      font-size: 18px;
-      font-weight: bold;
-      color: #e94560;
-    }
     .top4-table .date { color: #e0e0e0; }
-    .top4-table .lunar { font-size: 12px; color: #808090; }
-    .top4-table .tide-range { font-size: 13px; color: #e94560; }
+    .top4-table .lunar { font-size: 11px; color: #808090; }
+    .top4-table .tide-range { font-size: 12px; color: #e94560; }
     .top4-table .t-time { color: #c0c0d0; font-variant-numeric: tabular-nums; }
-    .top4-table .t-height { color: #e94560; font-weight: 600; font-variant-numeric: tabular-nums; }
+    .top4-table .t-height { font-weight: 600; font-variant-numeric: tabular-nums; }
     .top4-table .t-height.max { color: #e94560; }
     .top4-table .t-height.non-max { color: #a0a0b0; }
     .top4-table .dash { color: #606070; }
-    .top4-table .row-sep td { border-bottom: 8px solid #16213e; }
 
     /* ── 功能二：每日潮汐+天氣 ── */
     .detail-day {
       background: #16213e;
       border: 1px solid #3a3a5c;
       border-radius: 10px;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       overflow: hidden;
     }
     .detail-day-header {
       display: flex;
+      flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
-      padding: 12px 16px;
+      padding: 10px 12px;
       background: #1a2744;
       border-bottom: 1px solid #3a3a5c;
+      gap: 6px;
     }
-    .detail-day-header .date { font-size: 16px; font-weight: 600; color: #e0e0e0; }
+    .detail-day-header .date { font-size: 15px; font-weight: 600; color: #e0e0e0; }
     .detail-day-header .lunar { font-size: 12px; color: #808090; }
     .detail-day-header .tide-range { font-size: 13px; color: #e94560; }
 
-    .detail-body { padding: 12px 16px; }
+    .detail-body { padding: 10px 12px; }
 
     .tide-row {
       display: flex;
       align-items: center;
-      gap: 12px;
-      padding: 6px 0;
+      gap: 8px;
+      padding: 5px 0;
       border-bottom: 1px dashed #2a2a4a;
     }
     .tide-row:last-child { border-bottom: none; }
-    .tide-row .type { width: 50px; font-size: 14px; font-weight: 600; }
+    .tide-row .type { width: 44px; font-size: 13px; font-weight: 600; }
     .tide-row .type.high { color: #e94560; }
     .tide-row .type.low { color: #5b9bd5; }
-    .tide-row .t-time { width: 60px; font-size: 14px; color: #c0c0d0; }
-    .tide-row .t-height { width: 70px; font-size: 14px; color: #a0a0b0; }
-    .tide-row .t-dn { font-size: 12px; padding: 1px 6px; border-radius: 3px; }
+    .tide-row .t-time { width: 52px; font-size: 13px; color: #c0c0d0; font-variant-numeric: tabular-nums; }
+    .tide-row .t-height { flex: 1; font-size: 13px; color: #a0a0b0; }
+    .tide-row .t-dn { font-size: 11px; padding: 1px 6px; border-radius: 3px; }
+    .dn-day { background: #2d4a3e; color: #6abf69; }
+    .dn-night { background: #2d3a5e; color: #7b9bcc; }
 
     .weather-section {
-      margin-top: 10px;
-      padding-top: 10px;
+      margin-top: 8px;
+      padding-top: 8px;
       border-top: 1px solid #2a2a4a;
     }
     .weather-section h4 {
-      font-size: 13px;
+      font-size: 12px;
       color: #a0a0b0;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
     .weather-row {
       display: grid;
-      grid-template-columns: 90px 80px 50px 50px 50px 60px 50px;
-      gap: 6px;
-      padding: 4px 0;
-      font-size: 13px;
+      grid-template-columns: 70px 1fr 36px 32px 36px 40px;
+      gap: 4px;
+      padding: 3px 0;
+      font-size: 12px;
       align-items: center;
     }
     .weather-header {
       color: #808090;
       font-weight: 600;
       border-bottom: 1px solid #2a2a4a;
-      padding-bottom: 4px;
+      padding-bottom: 3px;
     }
     .weather-data { color: #c0c0d0; }
     .weather-data .wx-rain { color: #5b9bd5; }
     .weather-data .wx-clear { color: #e8b04b; }
     .weather-data .pop-high { color: #e94560; font-weight: 600; }
 
-    .section-title {
-      font-size: 14px;
-      color: #a0a0b0;
-      margin: 16px 0 8px;
-      padding-bottom: 4px;
-      border-bottom: 1px solid #2a2a4a;
-    }
-
     .footer {
       text-align: center;
-      margin-top: 30px;
-      font-size: 12px;
+      margin-top: 20px;
+      font-size: 11px;
       color: #606070;
+      line-height: 1.6;
     }
   </style>
 </head>
 <body>
-  <h1>🌊 潮汐查詢網站</h1>
+  <h1>🐦 賞鳥潮汐查詢</h1>
 
   <!-- Tab 切換 -->
   <div class="tabs">
@@ -274,14 +263,14 @@
     </select>
   </div>
 
-  <!-- 功能一：最高三天 -->
+  <!-- 功能一：最高五天 -->
   <div class="result-panel active" id="panelTop3">
-    <div class="loading" id="top3Loading">請選擇地區查看未來一個月潮汐最高的五天</div>
+    <div class="loading">請選擇地區查看未來一個月潮汐最高的五天</div>
   </div>
 
   <!-- 功能二：3-7天詳細 -->
   <div class="result-panel" id="panelDetail">
-    <div class="loading" id="detailLoading">請選擇地區查看未來3-7天潮汐及天氣預報</div>
+    <div class="loading">請選擇地區查看未來3-7天潮汐及天氣預報</div>
   </div>
 
   <div class="footer">
@@ -309,7 +298,6 @@
         document.getElementById('daysSelector').style.display = 'flex';
       }
 
-      // If location already selected, refresh
       if (currentLocation) {
         if (tab === 'top3') loadTop3(currentLocation);
         else loadDetail(currentLocation);
@@ -350,51 +338,48 @@
     function renderTop3(data) {
       const panel = document.getElementById('panelTop3');
       let html = `<div class="top3-card">
-        <h3>${data.location} — 未來一個月潮汐最高五天</h3>
+        <h3>${data.location}</h3>
         <table class="top4-table">
           <thead>
             <tr>
-              <th style="width:40px;">排名</th>
-              <th style="width:130px;">日期</th>
-              <th style="width:80px;">農曆</th>
-              <th style="width:50px;">潮差</th>
-              <th style="width:70px;">時段一</th>
-              <th style="width:70px;">潮高</th>
-              <th style="width:70px;">時段二</th>
-              <th style="width:70px;">潮高</th>
+              <th>日期</th>
+              <th>農曆</th>
+              <th>潮差</th>
+              <th>時段一</th>
+              <th>潮高</th>
+              <th>時段二</th>
+              <th>潮高</th>
             </tr>
           </thead>
           <tbody>`;
 
       data.top4.forEach((day, i) => {
         const dateFmt = formatDate(day.date);
+        const lunarFmt = formatLunar(day.lunar);
         const tides = day.tides;
         const maxH = day.max_height;
 
-        // 時段一
         let t1Time = '<span class="dash">--</span>';
         let t1Height = '<span class="dash">--</span>';
         if (tides.length >= 1) {
           const t1 = tides[0];
           const cls = t1.height_val === maxH ? 'max' : 'non-max';
           t1Time = `<span class="t-time">${t1.time}</span>`;
-          t1Height = `<span class="t-height ${cls}">${t1.height} cm</span>`;
+          t1Height = `<span class="t-height ${cls}">${t1.height}</span>`;
         }
 
-        // 時段二
         let t2Time = '<span class="dash">--</span>';
         let t2Height = '<span class="dash">--</span>';
         if (tides.length >= 2) {
           const t2 = tides[1];
           const cls = t2.height_val === maxH ? 'max' : 'non-max';
           t2Time = `<span class="t-time">${t2.time}</span>`;
-          t2Height = `<span class="t-height ${cls}">${t2.height} cm</span>`;
+          t2Height = `<span class="t-height ${cls}">${t2.height}</span>`;
         }
 
         html += `<tr>
-          <td class="rank">#${i + 1}</td>
           <td class="date">${dateFmt}</td>
-          <td class="lunar">${day.lunar || ''}</td>
+          <td class="lunar">${lunarFmt}</td>
           <td class="tide-range">${day.tide_range}</td>
           <td>${t1Time}</td>
           <td>${t1Height}</td>
@@ -404,9 +389,9 @@
       });
 
       html += `</tbody></table></div>
-        <div style="text-align:center; color:#808090; font-size:13px; margin-top:12px;">
-          潮高基準：相對當地平均海平面 (AboveLocalMSL)<br>
-          每日最高潮高用於排序前五名，紅色為當日最高
+        <div style="text-align:center; color:#808090; font-size:11px; margin-top:8px;">
+          潮高基準：相對當地平均海平面 (cm)<br>
+          紅色為當日最高潮高
         </div>`;
       panel.innerHTML = html;
     }
@@ -430,22 +415,22 @@
 
     function renderDetail(data) {
       const panel = document.getElementById('panelDetail');
-      let html = `<div style="text-align:center; font-size:18px; color:#e94560; margin-bottom:16px; font-weight:600;">
-        ${data.location} — 未來 ${data.days} 天潮汐與天氣預報
+      let html = `<div style="text-align:center; font-size:16px; color:#e94560; margin-bottom:12px; font-weight:600;">
+        ${data.location}
       </div>`;
 
       if (data.tide) {
         data.tide.days.forEach(day => {
           const dateFmt = formatDate(day.date);
+          const lunarFmt = formatLunar(day.lunar);
           html += `<div class="detail-day">
             <div class="detail-day-header">
               <span class="date">${dateFmt}</span>
-              <span class="lunar">${day.lunar || ''}</span>
+              <span class="lunar">${lunarFmt}</span>
               <span class="tide-range">潮差：${day.tide_range}</span>
             </div>
             <div class="detail-body">`;
 
-          // 潮汐時間
           day.tides.forEach(t => {
             const dnClass = t.is_daytime ? 'dn-day' : 'dn-night';
             const dnText = t.is_daytime ? '白' : '夜';
@@ -458,7 +443,6 @@
             </div>`;
           });
 
-          // 天氣預報
           if (data.weather && data.weather.length > 0) {
             const dayWeather = data.weather.filter(w => {
               return w.start && w.start.substring(0, 10) === day.date;
@@ -470,16 +454,13 @@
                 <div class="weather-row weather-header">
                   <span>時段</span>
                   <span>天氣</span>
-                  <span>溫度</span>
-                  <span>降雨</span>
+                  <span>溫</span>
+                  <span>雨</span>
                   <span>風速</span>
                   <span>風向</span>
-                  <span></span>
                 </div>`;
 
               dayWeather.forEach(w => {
-                const startH = w.start ? w.start.substring(11, 16) : '';
-                const endH = w.end ? w.end.substring(11, 16) : '';
                 const period = w.is_daytime ? '白天' : '晚上';
                 const wx = w.wx || '-';
                 const temp = w.temp ? w.temp + '°' : '-';
@@ -491,13 +472,12 @@
                 const popClass = parseInt(w.pop) >= 50 ? 'pop-high' : '';
 
                 html += `<div class="weather-row weather-data">
-                  <span>${period} ${startH}-${endH}</span>
+                  <span>${period}</span>
                   <span class="${wxClass}">${wx}</span>
                   <span>${temp}</span>
                   <span class="${popClass}">${pop}</span>
                   <span>${ws}級</span>
                   <span>${wd}</span>
-                  <span></span>
                 </div>`;
               });
 
@@ -516,8 +496,8 @@
         html += `<div class="error">天氣資料錯誤: ${data.weather_error}</div>`;
       }
 
-      html += `<div style="text-align:center; color:#808090; font-size:13px; margin-top:12px;">
-        潮高基準：相對當地平均海平面 | 白天定義：06:00-18:00
+      html += `<div style="text-align:center; color:#808090; font-size:11px; margin-top:8px;">
+        潮高基準：相對當地平均海平面 (cm) | 白天：06:00-18:00
       </div>`;
 
       panel.innerHTML = html;
@@ -530,7 +510,17 @@
       const m = d.getMonth() + 1;
       const day = d.getDate();
       const w = weekdays[d.getDay()];
-      return `${m}月${day}日(週${w})`;
+      return `${m}/${day}(${w})`;
+    }
+
+    function formatLunar(lunarStr) {
+      if (!lunarStr) return '';
+      // 農曆格式 "2026-07-01" → 只取月/日 "07/01"
+      const parts = lunarStr.split('-');
+      if (parts.length >= 3) {
+        return parts[1] + '/' + parts[2];
+      }
+      return lunarStr;
     }
   </script>
 </body>

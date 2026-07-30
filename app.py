@@ -23,43 +23,43 @@ LOCATIONS = {
         "tide_name": "新北市淡水區",
         "weather_dataset": "F-D0047-071",   # 新北市未來1週
         "weather_township": "淡水區",
-        "label": "新北市 淡水",
+        "label": "淡水",
     },
     "蘆竹": {
         "tide_name": "桃園市蘆竹區",
         "weather_dataset": "F-D0047-007",   # 桃園市未來1週
         "weather_township": "蘆竹區",
-        "label": "桃園市 蘆竹",
+        "label": "蘆竹",
     },
     "香山": {
         "tide_name": "新竹市香山區",
         "weather_dataset": "F-D0047-055",   # 新竹市未來1週
         "weather_township": "香山區",
-        "label": "新竹市 香山",
+        "label": "香山",
     },
     "壯圍": {
         "tide_name": "宜蘭縣壯圍鄉",
         "weather_dataset": "F-D0047-003",   # 宜蘭縣未來1週
         "weather_township": "壯圍鄉",
-        "label": "宜蘭縣 壯圍",
+        "label": "壯圍",
     },
     "將軍": {
         "tide_name": "臺南市將軍區",
         "weather_dataset": "F-D0047-079",   # 臺南市未來1週
         "weather_township": "將軍區",
-        "label": "臺南市 將軍",
+        "label": "將軍",
     },
     "金城": {
         "tide_name": "金門縣金城鎮",
         "weather_dataset": "F-D0047-087",   # 金門縣未來1週
         "weather_township": "金城鎮",
-        "label": "金門縣 金城",
+        "label": "金城",
     },
     "東引": {
         "tide_name": "連江縣東引鄉",
         "weather_dataset": "F-D0047-083",   # 連江縣未來1週
         "weather_township": "東引鄉",
-        "label": "連江縣 東引",
+        "label": "東引",
     },
 }
 
