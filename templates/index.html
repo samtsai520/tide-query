@@ -258,6 +258,281 @@
       color: #606070;
       line-height: 1.6;
     }
+
+    /* ── 功能三：年度潮汐月曆 ── */
+    .annual-source-badge {
+      text-align: center;
+      font-size: 11px;
+      margin-bottom: 10px;
+      padding: 3px 10px;
+      border-radius: 4px;
+      display: inline-block;
+    }
+    .annual-source-badge.local {
+      background: #2d4a3e;
+      color: #6abf69;
+    }
+    .annual-source-badge.api {
+      background: #2d3a5e;
+      color: #7b9bcc;
+    }
+    .annual-source-wrap {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .month-card {
+      background: #16213e;
+      border: 1px solid #3a3a5c;
+      border-radius: 10px;
+      margin-bottom: 12px;
+      overflow: hidden;
+    }
+    .month-card-header {
+      padding: 8px 12px;
+      background: #1a2744;
+      border-bottom: 1px solid #3a3a5c;
+      font-size: 15px;
+      font-weight: 600;
+      color: #e0e0e0;
+      text-align: center;
+    }
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 1px;
+      padding: 6px;
+    }
+    .cal-weekday {
+      text-align: center;
+      font-size: 11px;
+      color: #808090;
+      font-weight: 600;
+      padding: 4px 0;
+    }
+    .cal-day {
+      aspect-ratio: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border-radius: 5px;
+      cursor: pointer;
+      position: relative;
+      font-size: 13px;
+      transition: all 0.15s;
+      gap: 1px;
+    }
+    .cal-day.empty {
+      cursor: default;
+    }
+    .cal-day .day-num {
+      font-weight: 700;
+      font-size: 19px;
+      line-height: 1;
+    }
+    .cal-day .day-tide {
+      font-size: 15px;
+      color: #000;
+      line-height: 1;
+      margin-top: 2px;
+    }
+    .cal-day.has-data:hover {
+      transform: scale(1.12);
+      z-index: 10;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    }
+    .cal-day.selected {
+      box-shadow: 0 0 0 2px #5abb6a;
+      z-index: 5;
+    }
+    .cal-day .spring-tide-mark {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background: #ff2222;
+      border-radius: 5px 5px 0 0;
+      box-shadow: 0 0 4px #ff2222, 0 0 2px #ff2222;
+    }
+
+    /* 潮高色階：從低(深藍)到高(亮紅) */
+    .tide-level-0 { background: #1a2a3e; color: #606070; }
+    .tide-level-1 { background: #1e3a5e; color: #b0c8d8; }
+    .tide-level-2 { background: #2d5a7e; color: #c0d8e8; }
+    .tide-level-3 { background: #3d7a6e; color: #d0e8d8; }
+    .tide-level-4 { background: #5a8a4e; color: #e0f0d0; }
+    .tide-level-5 { background: #8a8a3e; color: #f0f0d0; }
+    .tide-level-6 { background: #b06a2e; color: #f0e0c0; }
+    .tide-level-7 { background: #c04a2e; color: #ffe0d0; }
+    .tide-level-8 { background: #e94560; color: #fff0f0; }
+
+    .calendar-legend {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      margin: 8px 0;
+      flex-wrap: wrap;
+    }
+    .legend-label {
+      font-size: 11px;
+      color: #808090;
+      margin: 0 4px;
+    }
+    .legend-swatch {
+      width: 18px;
+      height: 14px;
+      border-radius: 3px;
+      display: inline-block;
+    }
+
+    .day-detail-popup {
+      background: #1a2744;
+      border: 1px solid #3a5a6a;
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin: 6px 0;
+    }
+    .day-detail-popup .popup-date {
+      font-size: 15px;
+      font-weight: 600;
+      color: #e0e0e0;
+      margin-bottom: 2px;
+    }
+    .day-detail-popup .popup-lunar {
+      font-size: 12px;
+      color: #808090;
+      margin-bottom: 6px;
+    }
+    .day-detail-popup .popup-tide-range {
+      font-size: 13px;
+      color: #e94560;
+      margin-bottom: 6px;
+    }
+    .day-detail-popup .popup-tides {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .day-detail-popup .popup-tide-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      padding: 2px 0;
+    }
+    .day-detail-popup .popup-tide-row .pt-type {
+      width: 44px;
+      font-weight: 600;
+    }
+    .day-detail-popup .popup-tide-row .pt-type.high { color: #e94560; }
+    .day-detail-popup .popup-tide-row .pt-type.low { color: #5b9bd5; }
+    .day-detail-popup .popup-tide-row .pt-time {
+      width: 52px;
+      color: #c0c0d0;
+      font-variant-numeric: tabular-nums;
+    }
+    .day-detail-popup .popup-tide-row .pt-height {
+      color: #a0a0b0;
+    }
+    .day-detail-popup .popup-tide-row .pt-dn {
+      font-size: 11px;
+      padding: 1px 6px;
+      border-radius: 3px;
+    }
+
+    /* ── 潮汐明細 Modal Overlay ── */
+    .tide-modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .tide-modal-overlay.active {
+      display: flex;
+    }
+    .tide-modal {
+      background: #1a2744;
+      border: 1px solid #3a5a6a;
+      border-radius: 12px;
+      padding: 16px 18px;
+      max-width: 340px;
+      width: 100%;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+    }
+    .tide-modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 10px;
+    }
+    .tide-modal-header-left .tm-date {
+      font-size: 17px;
+      font-weight: 700;
+      color: #e0e0e0;
+    }
+    .tide-modal-header-left .tm-lunar {
+      font-size: 13px;
+      color: #808090;
+      margin-top: 2px;
+    }
+    .tide-modal-header-left .tm-tide-range {
+      font-size: 13px;
+      color: #e94560;
+      margin-top: 4px;
+    }
+    .tide-modal-close {
+      background: none;
+      border: none;
+      color: #808090;
+      font-size: 22px;
+      cursor: pointer;
+      padding: 0 4px;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+    .tide-modal-close:hover { color: #e0e0e0; }
+    .tide-modal-tides {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .tide-modal-tide-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 15px;
+      padding: 6px 8px;
+      border-radius: 6px;
+      background: rgba(255,255,255,0.03);
+    }
+    .tide-modal-tide-row .tm-type {
+      width: 44px;
+      font-weight: 700;
+    }
+    .tide-modal-tide-row .tm-type.high { color: #e94560; }
+    .tide-modal-tide-row .tm-type.low { color: #5b9bd5; }
+    .tide-modal-tide-row .tm-time {
+      width: 56px;
+      color: #c0c0d0;
+      font-variant-numeric: tabular-nums;
+    }
+    .tide-modal-tide-row .tm-height {
+      flex: 1;
+      color: #a0a0b0;
+      font-variant-numeric: tabular-nums;
+    }
+    .tide-modal-tide-row .tm-dn {
+      font-size: 12px;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
   </style>
 </head>
 <body>
@@ -267,6 +542,7 @@
   <div class="tabs">
     <button class="tab-btn active" onclick="switchTab('detail')">3-7天潮汐+天氣</button>
     <button class="tab-btn" onclick="switchTab('top3')">未來一個月潮汐最高日期</button>
+    <button class="tab-btn" onclick="switchTab('annual')">年度潮汐月曆</button>
   </div>
 
   <!-- 地區按鈕方格 -->
@@ -298,10 +574,29 @@
     <div class="loading">請選擇地區查看未來3-7天潮汐及天氣預報</div>
   </div>
 
+  <!-- 功能三：年度潮汐月曆 -->
+  <div class="result-panel" id="panelAnnual">
+    <div class="loading">請選擇地區查看年度潮汐月曆</div>
+  </div>
+
   <div class="footer">
     資料來源：交通部中央氣象署 CWA Open Data API<br>
-    潮汐預報 F-A0021-001 | 鄉鎮天氣預報 F-D0047 系列 | 日出日落 A-B0062-001<br>
     Sam Tsai 製作，歡迎公益使用
+  </div>
+
+  <!-- 潮汐明細 Modal -->
+  <div class="tide-modal-overlay" id="tideModalOverlay" onclick="closeTideModal(event)">
+    <div class="tide-modal" id="tideModalContent">
+      <div class="tide-modal-header">
+        <div class="tide-modal-header-left">
+          <div class="tm-date" id="tmDate"></div>
+          <div class="tm-lunar" id="tmLunar"></div>
+          <div class="tm-tide-range" id="tmTideRange"></div>
+        </div>
+        <button class="tide-modal-close" onclick="closeTideModal(event)">&times;</button>
+      </div>
+      <div class="tide-modal-tides" id="tmTides"></div>
+    </div>
   </div>
 
   <script>
@@ -315,9 +610,13 @@
 
       document.getElementById('panelTop3').classList.remove('active');
       document.getElementById('panelDetail').classList.remove('active');
+      document.getElementById('panelAnnual').classList.remove('active');
 
       if (tab === 'top3') {
         document.getElementById('panelTop3').classList.add('active');
+        document.getElementById('daysSelector').style.display = 'none';
+      } else if (tab === 'annual') {
+        document.getElementById('panelAnnual').classList.add('active');
         document.getElementById('daysSelector').style.display = 'none';
       } else {
         document.getElementById('panelDetail').classList.add('active');
@@ -326,6 +625,7 @@
 
       if (currentLocation) {
         if (tab === 'top3') loadTop3(currentLocation);
+        else if (tab === 'annual') loadAnnual(currentLocation);
         else loadDetail(currentLocation);
       }
     }
@@ -336,6 +636,7 @@
       document.querySelector(`.loc-btn[data-key="${key}"]`).classList.add('active');
 
       if (currentTab === 'top3') loadTop3(key);
+      else if (currentTab === 'annual') loadAnnual(key);
       else loadDetail(key);
     }
 
@@ -556,6 +857,206 @@
         return '農曆' + parseInt(parts[1]) + '/' + parseInt(parts[2]);
       }
       return lunarStr;
+    }
+
+    // ── 功能三：年度潮汐月曆 ──
+
+    let annualCache = null;
+    let annualSelectedDate = null;
+
+    async function loadAnnual(key) {
+      const panel = document.getElementById('panelAnnual');
+      if (annualCache && annualCache._key === key) {
+        renderAnnual(annualCache);
+        return;
+      }
+      panel.innerHTML = '<div class="loading">查詢中...</div>';
+      try {
+        const res = await fetch(`/api/annual-tides/${key}`);
+        const data = await res.json();
+        if (data.error) {
+          panel.innerHTML = `<div class="error">❌ ${data.error}</div>`;
+          return;
+        }
+        data._key = key;
+        annualCache = data;
+        annualSelectedDate = null;
+        renderAnnual(data);
+      } catch (e) {
+        panel.innerHTML = `<div class="error">❌ 連線錯誤: ${e.message}</div>`;
+      }
+    }
+
+    function getTideLevel(maxH) {
+      // 將潮高對應到 0-8 色階
+      // 大約範圍：0cm → level 0, 300+cm → level 8
+      if (maxH < 0) return 0;
+      if (maxH < 30) return 1;
+      if (maxH < 60) return 2;
+      if (maxH < 100) return 3;
+      if (maxH < 130) return 4;
+      if (maxH < 160) return 5;
+      if (maxH < 200) return 6;
+      if (maxH < 250) return 7;
+      return 8;
+    }
+
+    function isSpringTide(dayData) {
+      // 優先使用後端計算的 is_spring 欄位（根據潮差或月排名前30%）
+      if (dayData.is_spring !== undefined) return dayData.is_spring;
+      // Fallback：無 is_spring 時用農曆日期判斷
+      if (dayData.tide_range === '大') return true;
+      if (dayData.tide_range && dayData.tide_range !== '') return false;
+      if (!dayData.lunar) return false;
+      const parts = dayData.lunar.split('-');
+      if (parts.length < 3) return false;
+      const lunarDay = parseInt(parts[2]);
+      return (lunarDay >= 1 && lunarDay <= 5) || (lunarDay >= 14 && lunarDay <= 20);
+    }
+
+    function renderAnnual(data) {
+      const panel = document.getElementById('panelAnnual');
+      let html = `<div style="text-align:center; font-size:16px; color:#e94560; margin-bottom:8px; font-weight:600;">
+        ${data.location}
+      </div>`;
+
+      // 資料來源標記
+      html += `<div class="annual-source-wrap">
+        <span class="annual-source-badge local">中央氣象署每年10月更新年度資料</span>
+      </div>`;
+
+      // 色階圖例
+      html += `<div class="calendar-legend">
+        <span class="legend-label">低</span>`;
+      for (let i = 0; i <= 8; i++) {
+        html += `<span class="legend-swatch tide-level-${i}"></span>`;
+      }
+      html += `<span class="legend-label">高</span>
+        <span class="legend-label" style="margin-left:8px;">▎大潮</span>
+      </div>`;
+
+      // 取得所有月份的潮高範圍（用於全期 normalization）
+      const months = data.months;
+      const sortedYm = Object.keys(months).sort();
+
+      // 月份名稱
+      const monthNames = ['','一月','二月','三月','四月','五月','六月',
+        '七月','八月','九月','十月','十一月','十二月'];
+
+      // 產生每個月的月曆
+      sortedYm.forEach(ym => {
+        const m = months[ym];
+        const year = m.year;
+        const month = m.month;
+
+        // 該月第一天是星期幾 (0=週日)
+        const firstDay = new Date(year, month - 1, 1).getDay();
+        // 該月天數
+        const daysInMonth = new Date(year, month, 0).getDate();
+
+        html += `<div class="month-card">
+          <div class="month-card-header">${year}年 ${monthNames[month]}</div>
+          <div class="calendar-grid">
+            <div class="cal-weekday">日</div>
+            <div class="cal-weekday">一</div>
+            <div class="cal-weekday">二</div>
+            <div class="cal-weekday">三</div>
+            <div class="cal-weekday">四</div>
+            <div class="cal-weekday">五</div>
+            <div class="cal-weekday">六</div>`;
+
+        // 空白格
+        for (let i = 0; i < firstDay; i++) {
+          html += '<div class="cal-day empty"></div>';
+        }
+
+        // 每一天
+        for (let d = 1; d <= daysInMonth; d++) {
+          const dateStr = `${year}-${String(month).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+          const dayData = m.days[dateStr];
+
+          if (dayData) {
+            const level = getTideLevel(dayData.max_height);
+            const isSpring = isSpringTide(dayData);
+            const springMark = isSpring ? '<span class="spring-tide-mark"></span>' : '';
+            html += `<div class="cal-day has-data tide-level-${level}" data-date="${dateStr}" onclick="selectCalendarDay('${dateStr}')">
+              ${springMark}
+              <span class="day-num">${d}</span>
+              <span class="day-tide">${dayData.max_height >= 0 ? dayData.max_height : ''}</span>
+            </div>`;
+          } else {
+            html += `<div class="cal-day empty tide-level-0">
+              <span class="day-num" style="color:#505060">${d}</span>
+            </div>`;
+          }
+        }
+
+        html += '</div></div>';
+      });
+
+      // 點選日期明細區（已改用 modal overlay）
+
+      html += `<div style="text-align:center; color:#808090; font-size:11px; margin-top:8px;">
+        潮高基準：相對當地平均海平面 (cm) | 點擊日期查看當日潮汐明細
+      </div>`;
+
+      panel.innerHTML = html;
+
+      // 如果有選中的日期，重新顯示明細
+      if (annualSelectedDate) {
+        selectCalendarDay(annualSelectedDate);
+      }
+    }
+
+    function selectCalendarDay(dateStr) {
+      if (!annualCache) return;
+      annualSelectedDate = dateStr;
+
+      // 標記選中
+      document.querySelectorAll('.cal-day.has-data').forEach(el => {
+        el.classList.remove('selected');
+      });
+      const target = document.querySelector(`.cal-day[data-date="${dateStr}"]`);
+      if (target) target.classList.add('selected');
+
+      // 找到該日資料
+      const ym = dateStr.slice(0, 7);
+      const months = annualCache.months;
+      const dayData = months[ym] && months[ym].days[dateStr];
+      if (!dayData) return;
+
+      // 填入 modal 內容
+      const dateFmt = formatDate(dateStr);
+      const lunarFmt = formatLunar(dayData.lunar);
+      const isSpring = isSpringTide(dayData);
+      const tideRangeText = dayData.tide_range ? `潮差：${dayData.tide_range}` : (isSpring ? '潮差：大潮' : '');
+
+      document.getElementById('tmDate').textContent = dateFmt;
+      document.getElementById('tmLunar').textContent = lunarFmt;
+      document.getElementById('tmTideRange').textContent = tideRangeText;
+
+      let tidesHtml = '';
+      dayData.tides.forEach(t => {
+        const dnClass = t.is_daytime ? 'dn-day' : 'dn-night';
+        const dnText = t.is_daytime ? '白' : '夜';
+        const typeClass = t.tide_type === '滿潮' ? 'high' : 'low';
+        tidesHtml += `<div class="tide-modal-tide-row">
+          <span class="tm-type ${typeClass}">${t.tide_type}</span>
+          <span class="tm-time">${t.time}</span>
+          <span class="tm-height">${t.height} cm</span>
+          <span class="tm-dn ${dnClass}">${dnText}</span>
+        </div>`;
+      });
+      document.getElementById('tmTides').innerHTML = tidesHtml;
+
+      // 顯示 modal
+      document.getElementById('tideModalOverlay').classList.add('active');
+    }
+
+    function closeTideModal(event) {
+      // 只在點擊 overlay 背景或關閉按鈕時關閉，不關閉 modal 內容
+      if (event && event.target !== event.currentTarget && !event.target.classList.contains('tide-modal-close')) return;
+      document.getElementById('tideModalOverlay').classList.remove('active');
     }
   </script>
 </body>

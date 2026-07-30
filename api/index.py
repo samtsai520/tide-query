@@ -513,5 +513,105 @@ def api_combined(location_key):
     return jsonify(result)
 
 
+# ── API: 年度潮汐月曆 ─────────────────────────────────────────
+
+def get_annual_tides(location_key):
+    """年度潮汐月曆：優先讀取本地 JSON（F-A0023-001 下載），
+    若無則用 F-A0021-001 API（近一個月）作為 fallback。"""
+    info = LOCATIONS[location_key]
+
+    import json as _json
+    data_dir = os.path.join(BASE_DIR, "data")
+    local_file = os.path.join(data_dir, f"annual_{location_key}.json")
+
+    all_data = None
+    source = "api"
+
+    if os.path.exists(local_file):
+        try:
+            with open(local_file, "r", encoding="utf-8") as f:
+                saved = _json.load(f)
+            all_data = saved.get("tides", [])
+            source = "local"
+        except Exception:
+            all_data = None
+
+    if all_data is None:
+        all_data, err = fetch_tide_data(info["tide_name"])
+        if err:
+            return None, err
+        source = "api"
+
+    months = {}
+    for d in all_data:
+        date = d.get("date", "")
+        if not date:
+            continue
+        ym = date[:7]
+
+        if ym not in months:
+            months[ym] = {"year": int(date[:4]), "month": int(date[5:7]), "days": {}}
+
+        if date not in months[ym]["days"]:
+            months[ym]["days"][date] = {
+                "date": date,
+                "lunar": d.get("lunar", ""),
+                "tide_range": d.get("tide_range", ""),
+                "max_height": -999,
+                "min_height": 999,
+                "tides": [],
+            }
+
+        entry = {
+            "time": d["time"],
+            "tide_type": d["tide_type"],
+            "height": d["height_above_msl"],
+            "is_daytime": d.get("is_daytime", False),
+        }
+        months[ym]["days"][date]["tides"].append(entry)
+
+        try:
+            h_val = int(d["height_above_msl"])
+            if h_val > months[ym]["days"][date]["max_height"]:
+                months[ym]["days"][date]["max_height"] = h_val
+            if h_val < months[ym]["days"][date]["min_height"]:
+                months[ym]["days"][date]["min_height"] = h_val
+        except (ValueError, TypeError):
+            pass
+
+    for ym in months:
+        for date in months[ym]["days"]:
+            months[ym]["days"][date]["tides"].sort(key=lambda x: x["time"])
+
+    # 計算大潮標記：根據每月潮高排名前 20% 標記為大潮
+    for ym in months:
+        days = months[ym]["days"]
+        sorted_dates = sorted(
+            days.keys(),
+            key=lambda d: days[d]["max_height"],
+            reverse=True
+        )
+        top_n = max(1, int(len(sorted_dates) * 0.3))
+        for i, d in enumerate(sorted_dates):
+            days[d]["is_spring"] = i < top_n
+
+    return {
+        "location": info["label"],
+        "source": source,
+        "months": months,
+    }, None
+
+
+@app.route("/api/annual-tides/<location_key>")
+def api_annual_tides(location_key):
+    location_key = unquote(location_key)
+    if location_key not in LOCATIONS:
+        return jsonify({"error": "未知地點"}), 400
+    result, err = get_annual_tides(location_key)
+    if err:
+        return jsonify({"error": err}), 500
+    return jsonify(result)
+
+
 # Vercel serverless entry point
 app = app
