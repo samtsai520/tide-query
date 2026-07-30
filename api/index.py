@@ -64,6 +64,18 @@ LOCATIONS = {
         "weather_township": "東引鄉",
         "label": "馬祖 東引",
     },
+    "芳苑": {
+        "tide_name": "彰化縣芳苑鄉",
+        "weather_dataset": "F-D0047-019",
+        "weather_township": "芳苑鄉",
+        "label": "彰化 芳苑",
+    },
+    "布袋": {
+        "tide_name": "嘉義縣布袋鎮",
+        "weather_dataset": "F-D0047-031",
+        "weather_township": "布袋鎮",
+        "label": "嘉義 布袋",
+    },
 }
 
 
