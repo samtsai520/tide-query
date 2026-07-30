@@ -226,6 +226,30 @@
     .weather-data .wx-clear { color: #e8b04b; }
     .weather-data .pop-high { color: #e94560; font-weight: 600; }
 
+    /* ── 日出日落 ── */
+    .sun-section {
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px solid #2a2a4a;
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+    }
+    .sun-item {
+      font-size: 13px;
+      color: #c0c0d0;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .sun-icon {
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .sun-item .sun-icon { color: #e8b04b; }
+    .sun-item:last-child .sun-icon { color: #7b5b8a; }
+    .sun-time { font-variant-numeric: tabular-nums; font-weight: 600; color: #e0e0e0; }
+
     .footer {
       text-align: center;
       margin-top: 20px;
@@ -275,7 +299,7 @@
 
   <div class="footer">
     資料來源：交通部中央氣象署 CWA Open Data API<br>
-    潮汐預報 F-A0021-001 | 鄉鎮天氣預報 F-D0047 系列<br>
+    潮汐預報 F-A0021-001 | 鄉鎮天氣預報 F-D0047 系列 | 日出日落 A-B0062-001<br>
     Sam Tsai 製作，歡迎公益使用
   </div>
 
@@ -484,6 +508,15 @@
 
               html += `</div>`;
             }
+          }
+
+          // 日出日落
+          if (data.sunrise_sunset && data.sunrise_sunset[day.date]) {
+            const sun = data.sunrise_sunset[day.date];
+            html += `<div class="sun-section">
+              <span class="sun-item"><span class="sun-icon">↑</span> 日出 <span class="sun-time">${sun.sunrise}</span></span>
+              <span class="sun-item"><span class="sun-icon">↓</span> 日落 <span class="sun-time">${sun.sunset}</span></span>
+            </div>`;
           }
 
           html += `</div></div>`;
