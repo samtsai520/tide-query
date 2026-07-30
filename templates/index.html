@@ -549,10 +549,10 @@
 
     function formatLunar(lunarStr) {
       if (!lunarStr) return '';
-      // 農曆格式 "2026-07-01" → 只取月/日 "07/01"
+      // 農曆格式 "2026-07-01" → "農曆7/01"
       const parts = lunarStr.split('-');
       if (parts.length >= 3) {
-        return parts[1] + '/' + parts[2];
+        return '農曆' + parseInt(parts[1]) + '/' + parseInt(parts[2]);
       }
       return lunarStr;
     }
