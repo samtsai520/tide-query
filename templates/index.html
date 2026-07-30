@@ -240,8 +240,8 @@
 
   <!-- Tab 切換 -->
   <div class="tabs">
-    <button class="tab-btn active" onclick="switchTab('top3')">未來一月最高五天</button>
-    <button class="tab-btn" onclick="switchTab('detail')">3-7天潮汐+天氣</button>
+    <button class="tab-btn active" onclick="switchTab('detail')">3-7天潮汐+天氣</button>
+    <button class="tab-btn" onclick="switchTab('top3')">未來一月最高五天</button>
   </div>
 
   <!-- 地區按鈕方格 -->
@@ -252,7 +252,7 @@
   </div>
 
   <!-- 天數選擇器（功能二） -->
-  <div class="days-selector" id="daysSelector" style="display:none;">
+  <div class="days-selector" id="daysSelector">
     <label>查詢天數：</label>
     <select id="daysSelect" onchange="refreshDetail()">
       <option value="3">3 天</option>
@@ -264,12 +264,12 @@
   </div>
 
   <!-- 功能一：最高五天 -->
-  <div class="result-panel active" id="panelTop3">
+  <div class="result-panel" id="panelTop3">
     <div class="loading">請選擇地區查看未來一個月潮汐最高的五天</div>
   </div>
 
   <!-- 功能二：3-7天詳細 -->
-  <div class="result-panel" id="panelDetail">
+  <div class="result-panel active" id="panelDetail">
     <div class="loading">請選擇地區查看未來3-7天潮汐及天氣預報</div>
   </div>
 
@@ -280,7 +280,7 @@
   </div>
 
   <script>
-    let currentTab = 'top3';
+    let currentTab = 'detail';
     let currentLocation = null;
 
     function switchTab(tab) {
